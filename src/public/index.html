@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.socket.io/4.2.0/socket.io.min.js" integrity="sha384-PiBR5S00EtOj2Lto9Uu81cmoyZqR57XcOna1oAuVuIEjzj0wpqDVfD0JA9eXlRsj" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <script>
+        const socket = io('http://localhost:3333', {
+            transports: ['websocket']
+        });
+        socket.on('test', (res) => {
+            showMesages(res.user,res.mesage);
+        });
+
+        function send(){
+            const user = document.querySelector('#user').value;
+            const mesage = document.querySelector('#mesage').value
+            // const mesage = document.querySelector('#mesage')
+            socket.emit('test', {
+                user,mesage
+            })
+            showMesages(user,mesage);
+        } 
+
+        function showMesages(user,mesage){
+            let mesagehtml = document.querySelector('#mesages').innerHTML;
+            mesagehtml = mesagehtml + `<p><strong>${user}</strong></p><p><strong>${mesage}</strong></p>`;
+            document.querySelector('#mesages').innerHTML = mesagehtml;
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="user" placeholder="Username: ">
+    <hr>
+    <br>
+    <textarea name="" id="mesage" cols="30" rows="10">
+    </textarea>
+    <br>
+    <button onclick="send()">Send</button>
+
+    <h3>Mesages</h3>
+    <div id="mesages">
+
+    </div>
+</body>
+</html>
